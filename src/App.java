@@ -4,7 +4,7 @@ public class App {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
-
+        menuIps();
     }
 
     public static void menuIps() {
@@ -33,6 +33,8 @@ public class App {
                     }
                     break;
                 case 2:
+                    listarPacientes(pacientes, contPacientes);
+                    System.out.println("\nPaciente ingresado con exito!");
                     break;
                 case 3:
                     break;
@@ -93,5 +95,21 @@ public class App {
         paciente[4] = nivelPrioridad;
 
         return paciente;
+    }
+
+    public static void listarPacientes(Object[][] pacientes, int contPacientes) {
+        if (contPacientes > 0) {
+            for (int i = 0; i < contPacientes; i++) {
+                System.out.println("\n===================================");
+                System.out.println("Paciente #" + (i + 1));
+                System.out.println("Numero de documento: " + pacientes[i][0]);
+                System.out.println("Nombre completo: " + pacientes[i][1]);
+                System.out.println("Edad: " + pacientes[i][2]);
+                System.out.println("Tipo de Atencion: " + pacientes[i][3]);
+                System.out.println("Nivel de prioridad: " + pacientes[i][4]);
+                System.out.println("===================================");
+            }
+        } else
+            System.out.println("\nNo hay pacientes ingresados.");
     }
 }
