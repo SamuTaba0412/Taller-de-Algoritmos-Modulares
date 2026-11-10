@@ -1,262 +1,27 @@
-<<<<<<< HEAD
 import java.util.Scanner;
+
 public class App {
-    
+
     static Scanner sc = new Scanner(System.in);
 
     static final int MAX = 25;
 
-    
     static String[] codigo = new String[MAX];
     static String[] nombre = new String[MAX];
     static double[] asistencia = new double[MAX];
     static double[] definitiva = new double[MAX];
     static String[] estado = new String[MAX];
 
-    
     static double[][] notas = new double[MAX][3];
 
     static int cantidad = 0;
 
     public static void main(String[] args) {
-
-        int opcion;
-
-        do {
-            System.out.println("\n===== SISTEMA DE CONTROL ACADEMICO =====");
-            System.out.println("1. Registrar estudiante");
-            System.out.println("2. Mostrar estudiantes");
-            System.out.println("3. Mostrar promedio general");
-            System.out.println("4. Mostrar mejor y peor promedio");
-            System.out.println("5. Salir");
-            System.out.print("Seleccione una opcion: ");
-
-            opcion = leerEntero();
-
-            switch (opcion) {
-
-                case 1:
-                    registrarEstudiante();
-                    break;
-
-                case 2:
-                    mostrarEstudiantes();
-                    break;
-
-                case 3:
-                    mostrarPromedioGeneral();
-                    break;
-
-                case 4:
-                    mostrarMejorYPeor();
-                    break;
-
-                case 5:
-                    System.out.println("Saliendo del sistema...");
-                    break;
-
-                default:
-                    System.out.println("Opcion no valida.");
-            }
-
-        } while (opcion != 5);
-
-    }
-
-    
-    static int leerEntero() {
-
-        while (true) {
-            try {
-                return Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.print("Ingrese un numero entero valido: ");
-            }
-        }
-    }
-
-    
-    static double leerDecimal() {
-
-        while (true) {
-            try {
-                return Double.parseDouble(
-                    sc.nextLine().replace(",", ".")
-                );
-            } catch (NumberFormatException e) {
-                System.out.print("Ingrese un numero valido: ");
-            }
-        }
-    }
-
-    
-    static double calcularDefinitiva(int posicion) {
-
-        double suma = 0;
-
-        for (int i = 0; i < 3; i++) {
-            suma += notas[posicion][i];
-        }
-
-        return suma / 3;
-    }
-
-    
-    static String determinarEstado(double nota) {
-
-        if (nota >= 3.0) {
-            return "Aprobado";
-        } else if (nota >= 2.0) {
-            return "Habilita";
-        } else {
-            return "Reprueba";
-        }
-    }
-
-    
-    static void registrarEstudiante() {
-
-        if (cantidad >= MAX) {
-            System.out.println("No se pueden registrar mas estudiantes.");
-            return;
-        }
-
-        int posicion = cantidad;
-
-        System.out.println("\n--- REGISTRO DE ESTUDIANTE ---");
-
-        System.out.print("Codigo: ");
-        codigo[posicion] = sc.nextLine();
-
-        System.out.print("Nombre: ");
-        nombre[posicion] = sc.nextLine();
-
-        
-        for (int i = 0; i < 3; i++) {
-
-            do {
-                System.out.print("Ingrese la nota parcial " + (i + 1) + ": ");
-                notas[posicion][i] = leerDecimal();
-
-                if (notas[posicion][i] < 0 ||
-                    notas[posicion][i] > 5) {
-
-                    System.out.println("Error: la nota debe estar entre 0.0 y 5.0.");
-                }
-
-            } while (notas[posicion][i] < 0 ||
-                     notas[posicion][i] > 5);
-        }
-
-        
-        do {
-            System.out.print("Porcentaje de asistencia (0-100): ");
-            asistencia[posicion] = leerDecimal();
-
-            if (asistencia[posicion] < 0 ||
-                asistencia[posicion] > 100) {
-
-                System.out.println("Error: la asistencia debe estar entre 0 y 100.");
-            }
-
-        } while (asistencia[posicion] < 0 ||
-                 asistencia[posicion] > 100);
-
-        
-        definitiva[posicion] = calcularDefinitiva(posicion);
-
-        estado[posicion] = determinarEstado(definitiva[posicion]);
-
-        cantidad++;
-
-        System.out.println("\nEstudiante registrado correctamente.");
-        System.out.printf("Definitiva: %.2f%n", definitiva[posicion]);
-        System.out.println("Estado: " + estado[posicion]);
-    }
-
-    
-    static void mostrarEstudiantes() {
-
-        if (cantidad == 0) {
-            System.out.println("No hay estudiantes registrados.");
-            return;
-        }
-
-        System.out.println("\n--- LISTADO DE ESTUDIANTES ---");
-
-        for (int i = 0; i < cantidad; i++) {
-
-            System.out.println("\nCodigo: " + codigo[i]);
-            System.out.println("Nombre: " + nombre[i]);
-
-            for (int j = 0; j < 3; j++) {
-                System.out.printf("Nota parcial %d: %.2f%n",
-                                  j + 1, notas[i][j]);
-            }
-
-            System.out.printf("Asistencia: %.2f%%%n", asistencia[i]);
-            System.out.printf("Definitiva: %.2f%n", definitiva[i]);
-            System.out.println("Estado: " + estado[i]);
-        }
-    }
-
-    
-    static void mostrarPromedioGeneral() {
-
-        if (cantidad == 0) {
-            System.out.println("No hay estudiantes registrados.");
-            return;
-        }
-
-        double suma = 0;
-
-        for (int i = 0; i < cantidad; i++) {
-            suma += definitiva[i];
-        }
-
-        double promedio = suma / cantidad;
-
-        System.out.printf("\nPromedio general del grupo: %.2f%n", promedio);
-    }
-
-    
-    static void mostrarMejorYPeor() {
-
-        if (cantidad == 0) {
-            System.out.println("No hay estudiantes registrados.");
-            return;
-        }
-
-        int mejor = 0;
-        int peor = 0;
-
-        for (int i = 1; i < cantidad; i++) {
-
-            if (definitiva[i] > definitiva[mejor]) {
-                mejor = i;
-            }
-
-            if (definitiva[i] < definitiva[peor]) {
-                peor = i;
-            }
-        }
-
-        System.out.println("\n--- MEJOR PROMEDIO ---");
-        System.out.println("Estudiante: " + nombre[mejor]);
-        System.out.printf("Definitiva: %.2f%n", definitiva[mejor]);
-
-        System.out.println("\n--- PEOR PROMEDIO ---");
-        System.out.println("Estudiante: " + nombre[peor]);
-        System.out.printf("Definitiva: %.2f%n", definitiva[peor]);
-    }
-
-}
-
-    
-    public static void main(String[] args) throws Exception {
+        menuNotas();
         menuIps();
     }
 
+    /* EJERCICIO #1: Sistema de control de turnos para una IPS*/
     public static void menuIps() {
         int opcion = 0, contPacientes = 0;
 
@@ -445,7 +210,8 @@ public class App {
             }
 
             for (int x = 0; x < contPacientes; x++) {
-                if ((int) pacientes[x][4] == prioridadMasAlta && obtenerJerarquiaAtencion(pacientes[x][3].toString()) == tipAtencionMasAlta) {
+                if ((int) pacientes[x][4] == prioridadMasAlta
+                        && obtenerJerarquiaAtencion(pacientes[x][3].toString()) == tipAtencionMasAlta) {
 
                     contPaciPrioritarios++;
 
@@ -472,5 +238,225 @@ public class App {
             return 2;
         else
             return 1;
+    }
+
+    /* EJERCICIO #3: Sistema de control académico para seguimiento de notas*/
+    public static void menuNotas() {
+
+        int opcion;
+
+        do {
+            System.out.println("\n===== SISTEMA DE CONTROL ACADEMICO =====");
+            System.out.println("1. Registrar estudiante");
+            System.out.println("2. Mostrar estudiantes");
+            System.out.println("3. Mostrar promedio general");
+            System.out.println("4. Mostrar mejor y peor promedio");
+            System.out.println("5. Salir");
+            System.out.print("Seleccione una opcion: ");
+
+            opcion = leerEntero();
+
+            switch (opcion) {
+
+                case 1:
+                    registrarEstudiante();
+                    break;
+
+                case 2:
+                    mostrarEstudiantes();
+                    break;
+
+                case 3:
+                    mostrarPromedioGeneral();
+                    break;
+
+                case 4:
+                    mostrarMejorYPeor();
+                    break;
+
+                case 5:
+                    System.out.println("Saliendo del sistema...");
+                    break;
+
+                default:
+                    System.out.println("Opcion no valida.");
+            }
+
+        } while (opcion != 5);
+    }
+
+    public static int leerEntero() {
+
+        while (true) {
+            try {
+                return Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.print("Ingrese un numero entero valido: ");
+            }
+        }
+    }
+
+    public static double leerDecimal() {
+
+        while (true) {
+            try {
+                return Double.parseDouble(
+                        sc.nextLine().replace(",", "."));
+            } catch (NumberFormatException e) {
+                System.out.print("Ingrese un numero valido: ");
+            }
+        }
+    }
+
+    public static double calcularDefinitiva(int posicion) {
+
+        double suma = 0;
+
+        for (int i = 0; i < 3; i++) {
+            suma += notas[posicion][i];
+        }
+
+        return suma / 3;
+    }
+
+    public static String determinarEstado(double nota) {
+
+        if (nota >= 3.0) {
+            return "Aprobado";
+        } else if (nota >= 2.0) {
+            return "Habilita";
+        } else {
+            return "Reprueba";
+        }
+    }
+
+    public static void registrarEstudiante() {
+
+        if (cantidad >= MAX) {
+            System.out.println("No se pueden registrar mas estudiantes.");
+            return;
+        }
+
+        int posicion = cantidad;
+
+        System.out.println("\n--- REGISTRO DE ESTUDIANTE ---");
+
+        System.out.print("Codigo: ");
+        codigo[posicion] = sc.nextLine();
+
+        System.out.print("Nombre: ");
+        nombre[posicion] = sc.nextLine();
+
+        for (int i = 0; i < 3; i++) {
+
+            do {
+                System.out.print("Ingrese la nota parcial " + (i + 1) + ": ");
+                notas[posicion][i] = leerDecimal();
+
+                if (notas[posicion][i] < 0 ||
+                        notas[posicion][i] > 5) {
+
+                    System.out.println("Error: la nota debe estar entre 0.0 y 5.0.");
+                }
+
+            } while (notas[posicion][i] < 0 ||
+                    notas[posicion][i] > 5);
+        }
+
+        do {
+            System.out.print("Porcentaje de asistencia (0-100): ");
+            asistencia[posicion] = leerDecimal();
+
+            if (asistencia[posicion] < 0 ||
+                    asistencia[posicion] > 100) {
+
+                System.out.println("Error: la asistencia debe estar entre 0 y 100.");
+            }
+
+        } while (asistencia[posicion] < 0 ||
+                asistencia[posicion] > 100);
+
+        definitiva[posicion] = calcularDefinitiva(posicion);
+
+        estado[posicion] = determinarEstado(definitiva[posicion]);
+
+        cantidad++;
+
+        System.out.println("\nEstudiante registrado correctamente.");
+        System.out.printf("Definitiva: %.2f%n", definitiva[posicion]);
+        System.out.println("Estado: " + estado[posicion]);
+    }
+
+    public static void mostrarEstudiantes() {
+
+        if (cantidad == 0) {
+            System.out.println("No hay estudiantes registrados.");
+            return;
+        }
+
+        System.out.println("\n--- LISTADO DE ESTUDIANTES ---");
+
+        for (int i = 0; i < cantidad; i++) {
+
+            System.out.println("\nCodigo: " + codigo[i]);
+            System.out.println("Nombre: " + nombre[i]);
+
+            for (int j = 0; j < 3; j++) {
+                System.out.printf("Nota parcial %d: %.2f%n",
+                        j + 1, notas[i][j]);
+            }
+
+            System.out.printf("Asistencia: %.2f%%%n", asistencia[i]);
+            System.out.printf("Definitiva: %.2f%n", definitiva[i]);
+            System.out.println("Estado: " + estado[i]);
+        }
+    }
+
+    public static void mostrarPromedioGeneral() {
+
+        if (cantidad == 0) {
+            System.out.println("No hay estudiantes registrados.");
+            return;
+        }
+
+        double suma = 0;
+
+        for (int i = 0; i < cantidad; i++) {
+            suma += definitiva[i];
+        }
+
+        double promedio = suma / cantidad;
+
+        System.out.printf("\nPromedio general del grupo: %.2f%n", promedio);
+    }
+
+    public static void mostrarMejorYPeor() {
+
+        if (cantidad == 0) {
+            System.out.println("No hay estudiantes registrados.");
+            return;
+        }
+
+        int mejor = 0;
+        int peor = 0;
+
+        for (int i = 1; i < cantidad; i++) {
+
+            if (definitiva[i] > definitiva[mejor]) {
+                mejor = i;
+            }
+
+            if (definitiva[i] < definitiva[peor]) {
+                peor = i;
+            }
+        }
+
+        System.out.println("\n--- MEJOR PROMEDIO ---");
+        System.out.println("Estudiante: " + nombre[mejor]);
+        System.out.printf("Definitiva: %.2f%n", definitiva[mejor]);
+
+        System.out.println("\n--- PEOR PROMEDIO ---");
+        System.out.println("Estudiante: " + nombre[peor]);
+        System.out.printf("Definitiva: %.2f%n", definitiva[peor]);
     }
 }
