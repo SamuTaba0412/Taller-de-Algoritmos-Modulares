@@ -8,14 +8,9 @@ public class App {
     }
 
     public static void menuIps() {
-        int opcion = 0, contPacientes = 4;
+        int opcion = 0, contPacientes = 0;
 
         Object[][] pacientes = new Object[30][5];
-
-        pacientes[0] = new Object[] { "1001234567", "Carlos Ramirez", 35, "Urgencias", 5 };
-        pacientes[1] = new Object[] { "1007654321", "Maria Fernanda Lopez", 22, "Consulta General", 2 };
-        pacientes[2] = new Object[] { "1009876543", "Andres Felipe Torres", 48, "Prioritaria", 4 };
-        pacientes[3] = new Object[] { "1017923676", "Samuel Tabares Patiño", 21, "Urgencias", 5 };
 
         do {
             System.out.println(
@@ -25,7 +20,7 @@ public class App {
 
             switch (opcion) {
                 case 1:
-                    if (contPacientes == 30)
+                    if (contPacientes >= 30)
                         System.out.println("\nYa no hay cupos disponibles.");
                     else {
                         pacientes[contPacientes] = registrarPaciente(pacientes, contPacientes);
