@@ -1,36 +1,78 @@
+
 import java.util.Scanner;
 
 public class App {
     static Scanner sc = new Scanner(System.in);
+    static final int CUPOS_ATENCION = 5;
 
     public static void main(String[] args) throws Exception {
         menuIps();
     }
 
     public static void menuIps() {
-        int opcion = 0, contPacientes = 0;
+        int opcion = 0, contPacientes = 7;
 
-        Object[][] pacientes = new Object[30][5];
+        Object[][] pacientes = {
+                { "1001", "Carlos Andrés Gómez", 25, "Urgencias", 5 },
+                { "1002", "María Fernanda Ruiz", 34, "Consulta General", 3 },
+                { "1003", "Juan Sebastián Pérez", 42, "Prioritaria", 4 },
+                { "1004", "Laura Camila Torres", 19, "Urgencias", 2 },
+                { "1005", "Andrés Felipe Castro", 56, "Consulta General", 5 },
+                { "1006", "Daniela Marcela Rojas", 28, "Prioritaria", 3 },
+                { "1007", "Santiago David López", 63, "Urgencias", 4 }
+        };
+
+        String[] estadoTurnos = {
+                "En atención",
+                "En atención",
+                "En atención",
+                "En atención",
+                "En atención",
+                "En espera",
+                "En espera"
+        };
 
         do {
             System.out.println(
-                    "\nBienvenido al sistema de control por turnos de la IPS!\nPor favor, seleccione una opcion:\n1. Registrar pacientes.\n2. Mostrar listado general.\n3. Buscar paciente por documento.\n4. Mostrar pacientes por tipo de atencion.\n5. Identificar paciente con mayor prioridad.\n6. Salir.");
+                    "\nBienvenido al sistema de control por turnos de la IPS!"
+                            + "\nPor favor, seleccione una opcion:"
+                            + "\n1. Registrar pacientes."
+                            + "\n2. Mostrar listado general."
+                            + "\n3. Buscar paciente por documento."
+                            + "\n4. Mostrar pacientes por tipo de atencion."
+                            + "\n5. Identificar paciente con mayor prioridad."
+                            + "\n6. Consultar cupos de atencion."
+                            + "\n7. Salir.");
+
             opcion = sc.nextInt();
             sc.nextLine();
 
             switch (opcion) {
                 case 1:
-                    if (contPacientes >= 30)
+                    if (contPacientes >= 30) {
                         System.out.println("\nYa no hay cupos disponibles.");
-                    else {
+                    } else {
                         pacientes[contPacientes] = registrarPaciente(pacientes, contPacientes);
+
+                        if (contarPacientesEstado(estadoTurnos, contPacientes,
+                                "En atención") < CUPOS_ATENCION) {
+                            estadoTurnos[contPacientes] = "En atención";
+                        } else {
+                            estadoTurnos[contPacientes] = "En espera";
+                        }
+
                         System.out.println("\nPaciente ingresado con exito!");
+                        System.out.println("Estado del turno: "
+                                + estadoTurnos[contPacientes]);
+
                         contPacientes++;
                     }
                     break;
+
                 case 2:
-                    listarPacientes(pacientes, contPacientes);
+                    listarPacientes(pacientes, estadoTurnos, contPacientes);
                     break;
+
                 case 3:
                     if (contPacientes > 0) {
                         String nDocumento;
@@ -38,9 +80,13 @@ public class App {
                         System.out.print("\nIngrese el numero de documento a buscar: ");
                         nDocumento = sc.nextLine();
 
-                        Object[] paciente = buscarPaciente(pacientes, nDocumento, contPacientes);
+                        Object[] paciente = buscarPaciente(
+                                pacientes, nDocumento, contPacientes);
 
                         if (paciente != null) {
+                            int indice = obtenerIndicePaciente(
+                                    pacientes, nDocumento, contPacientes);
+
                             System.out.println("\n===================================");
                             System.out.println("Paciente Encontrado:");
                             System.out.println("Numero de documento: " + paciente[0]);
@@ -48,26 +94,38 @@ public class App {
                             System.out.println("Edad: " + paciente[2]);
                             System.out.println("Tipo de Atencion: " + paciente[3]);
                             System.out.println("Nivel de prioridad: " + paciente[4]);
+                            System.out.println("Estado del turno: " + estadoTurnos[indice]);
                             System.out.println("===================================");
-                        } else
+                        } else {
                             System.out.println("\nPaciente no encontrado.");
-                    } else
+                        }
+                    } else {
                         System.out.println("\nNo hay pacientes ingresados.");
+                    }
                     break;
+
                 case 4:
                     contarPacientesTipo(pacientes, contPacientes);
                     break;
+
                 case 5:
-                    determinarPacientePrioritario(pacientes, contPacientes);
+                    determinarPacientePrioritario(
+                            pacientes, estadoTurnos, contPacientes);
                     break;
+
                 case 6:
+                    consultarCupos(estadoTurnos, contPacientes);
+                    break;
+
+                case 7:
                     System.out.println("\nMuchas gracias por usar nuestros servicios");
                     break;
+
                 default:
                     System.out.println("\nOpcion no valida.");
                     break;
             }
-        } while (opcion != 6);
+        } while (opcion != 7);
     }
 
     public static Object[] registrarPaciente(Object[][] pacientes, int contPacientes) {
@@ -103,7 +161,8 @@ public class App {
             System.out.print("Ingrese el tipo de atencion (Urgencias, Consulta General, Prioritaria): ");
             tipoAtencion = sc.nextLine();
 
-            if (tipoAtencion.equalsIgnoreCase("Urgencias") || tipoAtencion.equalsIgnoreCase("Consulta General")
+            if (tipoAtencion.equalsIgnoreCase("Urgencias")
+                    || tipoAtencion.equalsIgnoreCase("Consulta General")
                     || tipoAtencion.equalsIgnoreCase("Prioritaria"))
                 break;
             else
@@ -130,7 +189,9 @@ public class App {
         return paciente;
     }
 
-    public static void listarPacientes(Object[][] pacientes, int contPacientes) {
+    public static void listarPacientes(Object[][] pacientes,
+            String[] estadoTurnos, int contPacientes) {
+
         if (contPacientes > 0) {
             for (int i = 0; i < contPacientes; i++) {
                 System.out.println("\n===================================");
@@ -140,17 +201,32 @@ public class App {
                 System.out.println("Edad: " + pacientes[i][2]);
                 System.out.println("Tipo de Atencion: " + pacientes[i][3]);
                 System.out.println("Nivel de prioridad: " + pacientes[i][4]);
+                System.out.println("Estado del turno: " + estadoTurnos[i]);
                 System.out.println("===================================");
             }
-        } else
+        } else {
             System.out.println("\nNo hay pacientes ingresados.");
+        }
     }
 
-    public static Object[] buscarPaciente(Object[][] pacientes, String nDocumento, int contPacientes) {
+    public static Object[] buscarPaciente(Object[][] pacientes,
+            String nDocumento, int contPacientes) {
+
         for (int i = 0; i < contPacientes; i++)
             if (pacientes[i][0].equals(nDocumento))
                 return pacientes[i];
+
         return null;
+    }
+
+    public static int obtenerIndicePaciente(Object[][] pacientes,
+            String nDocumento, int contPacientes) {
+
+        for (int i = 0; i < contPacientes; i++)
+            if (pacientes[i][0].equals(nDocumento))
+                return i;
+
+        return -1;
     }
 
     public static void contarPacientesTipo(Object[][] pacientes, int contPacientes) {
@@ -172,13 +248,17 @@ public class App {
             System.out.println("Consulta General: " + contConsultaGeneral);
             System.out.println("Prioritaria: " + contPrioritaria);
             System.out.println("===================================");
-        } else
+        } else {
             System.out.println("\nNo hay pacientes ingresados.");
+        }
     }
 
-    public static void determinarPacientePrioritario(Object[][] pacientes, int contPacientes) {
+    public static void determinarPacientePrioritario(Object[][] pacientes,
+            String[] estadoTurnos, int contPacientes) {
+
         if (contPacientes > 0) {
-            int prioridadMasAlta = 0, tipAtencionMasAlta = 0, contPaciPrioritarios = 0;
+            int prioridadMasAlta = 0, tipAtencionMasAlta = 0;
+            int contPaciPrioritarios = 0;
 
             for (int i = 0; i < contPacientes; i++) {
                 if ((int) pacientes[i][4] > prioridadMasAlta)
@@ -187,7 +267,8 @@ public class App {
 
             for (int j = 0; j < contPacientes; j++) {
                 if ((int) pacientes[j][4] == prioridadMasAlta) {
-                    int jerarquia = obtenerJerarquiaAtencion(pacientes[j][3].toString());
+                    int jerarquia = obtenerJerarquiaAtencion(
+                            pacientes[j][3].toString());
 
                     if (jerarquia > tipAtencionMasAlta)
                         tipAtencionMasAlta = jerarquia;
@@ -195,7 +276,9 @@ public class App {
             }
 
             for (int x = 0; x < contPacientes; x++) {
-                if ((int) pacientes[x][4] == prioridadMasAlta && obtenerJerarquiaAtencion(pacientes[x][3].toString()) == tipAtencionMasAlta) {
+                if ((int) pacientes[x][4] == prioridadMasAlta
+                        && obtenerJerarquiaAtencion(
+                                pacientes[x][3].toString()) == tipAtencionMasAlta) {
 
                     contPaciPrioritarios++;
 
@@ -206,6 +289,7 @@ public class App {
                     System.out.println("Edad: " + pacientes[x][2]);
                     System.out.println("Tipo de Atencion: " + pacientes[x][3]);
                     System.out.println("Nivel de prioridad: " + pacientes[x][4]);
+                    System.out.println("Estado del turno: " + estadoTurnos[x]);
                     System.out.println("===================================");
                 }
             }
@@ -213,6 +297,37 @@ public class App {
         } else {
             System.out.println("\nNo hay pacientes ingresados.");
         }
+    }
+
+    public static int contarPacientesEstado(String[] estadoTurnos,
+            int contPacientes, String estado) {
+
+        int contador = 0;
+
+        for (int i = 0; i < contPacientes; i++) {
+            if (estadoTurnos[i].equalsIgnoreCase(estado))
+                contador++;
+        }
+
+        return contador;
+    }
+
+    public static void consultarCupos(String[] estadoTurnos, int contPacientes) {
+        int ocupados = contarPacientesEstado(
+                estadoTurnos, contPacientes, "En atención");
+
+        int disponibles = CUPOS_ATENCION - ocupados;
+
+        int enEspera = contarPacientesEstado(
+                estadoTurnos, contPacientes, "En espera");
+
+        System.out.println("\n===================================");
+        System.out.println("ESTADO DE LOS TURNOS");
+        System.out.println("Cupos totales: " + CUPOS_ATENCION);
+        System.out.println("Cupos ocupados: " + ocupados);
+        System.out.println("Cupos disponibles: " + disponibles);
+        System.out.println("Pacientes en espera: " + enEspera);
+        System.out.println("===================================");
     }
 
     public static int obtenerJerarquiaAtencion(String tipoAtencion) {
