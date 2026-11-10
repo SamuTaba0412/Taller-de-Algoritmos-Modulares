@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class InventarioCafeteria {
 
     static final int MAX = 20;
-    static final String[] CATEGORIAS = {"Bebidas", "Panadería", "Snacks"};
+    static final String[] CATEGORIAS = { "Bebidas", "Panadería", "Snacks" };
 
     static int[] codigos = new int[MAX];
     static String[] nombres = new String[MAX];
@@ -22,14 +22,28 @@ public class InventarioCafeteria {
             op = (int) leerNumero(sc, "Seleccione una opción: ");
 
             switch (op) {
-                case 1: registrar(sc); break;
-                case 2: vender(sc); break;
-                case 3: actualizar(sc); break;
-                case 4: mostrarAgotados(); break;
-                case 5: System.out.println("Total vendido hoy: $" + totalDia); break;
-                case 6: mostrarInventario(); break;
-                case 0: break;
-                default: System.out.println("Opción Inválida.");
+                case 1:
+                    registrar(sc);
+                    break;
+                case 2:
+                    vender(sc);
+                    break;
+                case 3:
+                    actualizar(sc);
+                    break;
+                case 4:
+                    mostrarAgotados();
+                    break;
+                case 5:
+                    System.out.println("Total vendido hoy: $" + totalDia);
+                    break;
+                case 6:
+                    mostrarInventario();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opción Inválida.");
             }
         } while (op != 0);
     }
@@ -70,18 +84,6 @@ public class InventarioCafeteria {
             System.out.println("El producto no existe.");
             return;
         }
-        int cant = (int) leerNumero(sc, "Cantidad a vender: ");
-
-    public static void main(String[] args) throws Exception {
-        
-        if (cant <= 0 || cant > cantidades[pos]) {
-            System.out.println("Cantidad inválida o stock insuficiente (disponible: " + cantidades[pos] + ").");
-            return;
-        }
-
-        cantidades[pos] -= cant;
-        totalDia += cant * precios[pos];
-        System.out.println("Venta realizada: " + cant + " x " + nombres[pos] + " = $" + (cant * precios[pos]));
     }
 
     static void actualizar(Scanner sc) {

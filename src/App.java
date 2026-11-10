@@ -17,8 +17,7 @@ public class App {
     static int cantidad = 0;
 
     public static void main(String[] args) {
-        menuNotas();
-        menuIps();
+        menuCafeteria();
     }
 
     /* EJERCICIO #1: Sistema de control de turnos para una IPS*/
@@ -238,6 +237,11 @@ public class App {
             return 2;
         else
             return 1;
+    }
+
+    /* EJERCICIO #2: Sistema de control de inventario para una cafetería universitaria*/
+    public static void menuCafeteria() {
+        InventarioCafeteria.ejecutar(sc);
     }
 
     /* EJERCICIO #3: Sistema de control académico para seguimiento de notas*/
