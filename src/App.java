@@ -17,8 +17,41 @@ public class App {
 
     static int cantidad = 0;
 
+    /* MENU DE REVISION */
     public static void main(String[] args) {
-        menuCafeteria();
+        int opcionTaller = 0;
+
+        do {
+            System.out.println("\n==================================="
+                    + "\nBIEVENIDO AL TALLER DE ALGORITMOS MODULARES"
+                    + "\nHecho por: Samuel Tabares Patiño, Luis Salinas y Mateo Santa Maria Rojas."
+                    + "\n==================================="
+                    + "\nElija un ejercicio para revisar: "
+                    + "\n1. EJERCICIO #1: Sistema de control de turnos para una IPS."
+                    + "\n2. EJERCICIO #2: Sistema de control de inventario para una cafetería universitaria."
+                    + "\n3. EJERCICIO #3: Sistema de control académico para seguimiento de notas."
+                    + "\n4. Salir.");
+            opcionTaller = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcionTaller) {
+                case 1:
+                    menuIps();
+                    break;
+                case 2:
+                    menuCafeteria();
+                    break;
+                case 3:
+                    menuNotas();
+                    break;
+                case 4:
+                    System.out.println("\nGracias por revisar nuestro trabajo.");
+                    break;
+                default:
+                    System.out.println("\nOpcion no valida.");
+                    break;
+            }
+        } while (opcionTaller != 4);
     }
 
     /* EJERCICIO #1: Sistema de control de turnos para una IPS */
