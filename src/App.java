@@ -10,27 +10,10 @@ public class App {
     }
 
     public static void menuIps() {
-        int opcion = 0, contPacientes = 7;
+        int opcion = 0, contPacientes = 0;
 
-        Object[][] pacientes = {
-                { "1001", "Carlos Andrés Gómez", 25, "Urgencias", 5 },
-                { "1002", "María Fernanda Ruiz", 34, "Consulta General", 3 },
-                { "1003", "Juan Sebastián Pérez", 42, "Prioritaria", 4 },
-                { "1004", "Laura Camila Torres", 19, "Urgencias", 2 },
-                { "1005", "Andrés Felipe Castro", 56, "Consulta General", 5 },
-                { "1006", "Daniela Marcela Rojas", 28, "Prioritaria", 3 },
-                { "1007", "Santiago David López", 63, "Urgencias", 4 }
-        };
-
-        String[] estadoTurnos = {
-                "En atención",
-                "En atención",
-                "En atención",
-                "En atención",
-                "En atención",
-                "En espera",
-                "En espera"
-        };
+        Object[][] pacientes = new Object[30][5];
+        String[] estadoTurnos = new String[30];
 
         do {
             System.out.println(
