@@ -15,7 +15,7 @@ public class App {
         pacientes[0] = new Object[] { "1001234567", "Carlos Ramirez", 35, "Urgencias", 5 };
         pacientes[1] = new Object[] { "1007654321", "Maria Fernanda Lopez", 22, "Consulta General", 2 };
         pacientes[2] = new Object[] { "1009876543", "Andres Felipe Torres", 48, "Prioritaria", 4 };
-        pacientes[3] = new Object[] { "1017923676", "Samuel Tabares Patiño", 21, "Consulta General", 1};
+        pacientes[3] = new Object[] { "1017923676", "Samuel Tabares Patiño", 21, "Consulta General", 1 };
 
         do {
             System.out.println(
@@ -29,34 +29,38 @@ public class App {
                         System.out.println("\nYa no hay cupos disponibles.");
                     else {
                         pacientes[contPacientes] = registrarPaciente(pacientes, contPacientes);
+                        System.out.println("\nPaciente ingresado con exito!");
                         contPacientes++;
                     }
                     break;
                 case 2:
                     listarPacientes(pacientes, contPacientes);
-                    System.out.println("\nPaciente ingresado con exito!");
                     break;
                 case 3:
-                    String nDocumento;
+                    if (contPacientes > 0) {
+                        String nDocumento;
 
-                    System.out.print("\nIngrese el numero de documento a buscar: ");
-                    nDocumento = sc.nextLine();
+                        System.out.print("\nIngrese el numero de documento a buscar: ");
+                        nDocumento = sc.nextLine();
 
-                    Object[] paciente = buscarPaciente(pacientes, nDocumento, contPacientes);
+                        Object[] paciente = buscarPaciente(pacientes, nDocumento, contPacientes);
 
-                    if (paciente != null) {
-                        System.out.println("\n===================================");
-                        System.out.println("Paciente Encontrado:");
-                        System.out.println("Numero de documento: " + paciente[0]);
-                        System.out.println("Nombre completo: " + paciente[1]);
-                        System.out.println("Edad: " + paciente[2]);
-                        System.out.println("Tipo de Atencion: " + paciente[3]);
-                        System.out.println("Nivel de prioridad: " + paciente[4]);
-                        System.out.println("===================================");
+                        if (paciente != null) {
+                            System.out.println("\n===================================");
+                            System.out.println("Paciente Encontrado:");
+                            System.out.println("Numero de documento: " + paciente[0]);
+                            System.out.println("Nombre completo: " + paciente[1]);
+                            System.out.println("Edad: " + paciente[2]);
+                            System.out.println("Tipo de Atencion: " + paciente[3]);
+                            System.out.println("Nivel de prioridad: " + paciente[4]);
+                            System.out.println("===================================");
+                        } else
+                            System.out.println("\nPaciente no encontrado.");
                     } else
-                        System.out.println("\nPaciente no encontrado.");
+                        System.out.println("\nNo hay pacientes ingresados.");
                     break;
                 case 4:
+                    contarPacientesTipo(pacientes, contPacientes);
                     break;
                 case 5:
                     break;
@@ -79,15 +83,24 @@ public class App {
             System.out.print("\nIngrese el numero del documento del paciente: ");
             nDocumento = sc.nextLine();
 
-            if (buscarPaciente(pacientes, nDocumento, contPacientes) == null) break;
-            else System.out.println("Ya existe un usuario con ese numero de documento. Ingrese un documento diferente.");
+            if (buscarPaciente(pacientes, nDocumento, contPacientes) == null)
+                break;
+            else
+                System.out.println("Ya existe un usuario con ese numero de documento. Ingrese un documento diferente.");
         }
 
         System.out.print("Ingrese el nombre completo del paciente: ");
         nombre = sc.nextLine();
 
-        System.out.print("Ingrese la edad del paciente: ");
-        edad = sc.nextInt();
+        while (true) {
+            System.out.print("Ingrese la edad del paciente: ");
+            edad = sc.nextInt();
+
+            if (edad > 0)
+                break;
+            else
+                System.out.println("Edad ingresada no valida. Ingresela nuevamente");
+        }
         sc.nextLine();
 
         while (true) {
@@ -110,6 +123,7 @@ public class App {
             else
                 System.out.println("Nivel de prioridad no permitido. Ingreselo nuevamente.");
         }
+        sc.nextLine();
 
         paciente[0] = nDocumento;
         paciente[1] = nombre;
@@ -137,18 +151,32 @@ public class App {
     }
 
     public static Object[] buscarPaciente(Object[][] pacientes, String nDocumento, int contPacientes) {
-        Object[] pacienteEncontrado = {};
+        for (int i = 0; i < contPacientes; i++)
+            if (pacientes[i][0].equals(nDocumento))
+                return pacientes[i];
+        return null;
+    }
 
+    public static void contarPacientesTipo(Object[][] pacientes, int contPacientes) {
         if (contPacientes > 0) {
-            for (int i = 0; i < contPacientes; i++) {
-                if (pacientes[i][0].equals(nDocumento)) {
-                    pacienteEncontrado = pacientes[i];
-                    break;
-                }
-            }
-        } else
-            System.out.println("\nNo hay pacientes ingresados.");
+            int contUrgencias = 0, contConsultaGeneral = 0, contPrioritaria = 0;
 
-        return pacienteEncontrado.length > 0 ? pacienteEncontrado : null;
+            for (int i = 0; i < contPacientes; i++) {
+                if (pacientes[i][3].toString().equalsIgnoreCase("Urgencias"))
+                    contUrgencias++;
+                else if (pacientes[i][3].toString().equalsIgnoreCase("Consulta General"))
+                    contConsultaGeneral++;
+                else if (pacientes[i][3].toString().equalsIgnoreCase("Prioritaria"))
+                    contPrioritaria++;
+            }
+
+            System.out.println("\n===================================");
+            System.out.println("Pacientes por tipo de atencion");
+            System.out.println("Urgencias: " + contUrgencias);
+            System.out.println("Consulta General: " + contConsultaGeneral);
+            System.out.println("Prioritaria: " + contPrioritaria);
+            System.out.println("===================================");
+        }
+        else System.out.println("\nNo hay pacientes ingresados.");
     }
 }
