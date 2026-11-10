@@ -5,14 +5,14 @@ public class App {
 
     static final int MAX = 25;
 
-    // Vectores
+    
     static String[] codigo = new String[MAX];
     static String[] nombre = new String[MAX];
     static double[] asistencia = new double[MAX];
     static double[] definitiva = new double[MAX];
     static String[] estado = new String[MAX];
 
-    // Matriz para las tres notas parciales
+    
     static double[][] notas = new double[MAX][3];
 
     static int cantidad = 0;
@@ -62,7 +62,7 @@ public class App {
 
     }
 
-    // FUNCION PARA LEER NUMEROS ENTEROS
+    
     static int leerEntero() {
 
         while (true) {
@@ -74,7 +74,7 @@ public class App {
         }
     }
 
-    // FUNCION PARA LEER NUMEROS DECIMALES
+    
     static double leerDecimal() {
 
         while (true) {
@@ -88,7 +88,7 @@ public class App {
         }
     }
 
-    // FUNCION PARA CALCULAR LA DEFINITIVA
+    
     static double calcularDefinitiva(int posicion) {
 
         double suma = 0;
@@ -100,7 +100,7 @@ public class App {
         return suma / 3;
     }
 
-    // FUNCION PARA DETERMINAR EL ESTADO
+    
     static String determinarEstado(double nota) {
 
         if (nota >= 3.0) {
@@ -112,7 +112,7 @@ public class App {
         }
     }
 
-    // PROCEDIMIENTO PARA REGISTRAR ESTUDIANTES
+    
     static void registrarEstudiante() {
 
         if (cantidad >= MAX) {
@@ -130,7 +130,7 @@ public class App {
         System.out.print("Nombre: ");
         nombre[posicion] = sc.nextLine();
 
-        // Registro y validacion de las tres notas
+        
         for (int i = 0; i < 3; i++) {
 
             do {
@@ -147,7 +147,7 @@ public class App {
                      notas[posicion][i] > 5);
         }
 
-        // Registro y validacion de asistencia
+        
         do {
             System.out.print("Porcentaje de asistencia (0-100): ");
             asistencia[posicion] = leerDecimal();
@@ -161,7 +161,7 @@ public class App {
         } while (asistencia[posicion] < 0 ||
                  asistencia[posicion] > 100);
 
-        // Calcular definitiva y estado
+        
         definitiva[posicion] = calcularDefinitiva(posicion);
 
         estado[posicion] = determinarEstado(definitiva[posicion]);
@@ -173,7 +173,7 @@ public class App {
         System.out.println("Estado: " + estado[posicion]);
     }
 
-    // PROCEDIMIENTO PARA MOSTRAR ESTUDIANTES
+    
     static void mostrarEstudiantes() {
 
         if (cantidad == 0) {
@@ -199,7 +199,7 @@ public class App {
         }
     }
 
-    // PROCEDIMIENTO PARA MOSTRAR EL PROMEDIO GENERAL
+    
     static void mostrarPromedioGeneral() {
 
         if (cantidad == 0) {
@@ -218,7 +218,7 @@ public class App {
         System.out.printf("\nPromedio general del grupo: %.2f%n", promedio);
     }
 
-    // PROCEDIMIENTO PARA IDENTIFICAR MEJOR Y PEOR PROMEDIO
+    
     static void mostrarMejorYPeor() {
 
         if (cantidad == 0) {
