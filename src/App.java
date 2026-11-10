@@ -15,7 +15,7 @@ public class App {
         pacientes[0] = new Object[] { "1001234567", "Carlos Ramirez", 35, "Urgencias", 5 };
         pacientes[1] = new Object[] { "1007654321", "Maria Fernanda Lopez", 22, "Consulta General", 2 };
         pacientes[2] = new Object[] { "1009876543", "Andres Felipe Torres", 48, "Prioritaria", 4 };
-        pacientes[3] = new Object[] { "1017923676", "Samuel Tabares Patiño", 21, "Consulta General", 1 };
+        pacientes[3] = new Object[] { "1017923676", "Samuel Tabares Patiño", 21, "Urgencias", 5 };
 
         do {
             System.out.println(
@@ -63,6 +63,7 @@ public class App {
                     contarPacientesTipo(pacientes, contPacientes);
                     break;
                 case 5:
+                    determinarPacientePrioritario(pacientes, contPacientes);
                     break;
                 case 6:
                     System.out.println("\nMuchas gracias por usar nuestros servicios");
@@ -176,7 +177,55 @@ public class App {
             System.out.println("Consulta General: " + contConsultaGeneral);
             System.out.println("Prioritaria: " + contPrioritaria);
             System.out.println("===================================");
+        } else
+            System.out.println("\nNo hay pacientes ingresados.");
+    }
+
+    public static void determinarPacientePrioritario(Object[][] pacientes, int contPacientes) {
+        if (contPacientes > 0) {
+            int prioridadMasAlta = 0, tipAtencionMasAlta = 0, contPaciPrioritarios = 0;
+
+            for (int i = 0; i < contPacientes; i++) {
+                if ((int) pacientes[i][4] > prioridadMasAlta)
+                    prioridadMasAlta = (int) pacientes[i][4];
+            }
+
+            for (int j = 0; j < contPacientes; j++) {
+                if ((int) pacientes[j][4] == prioridadMasAlta) {
+                    int jerarquia = obtenerJerarquiaAtencion(pacientes[j][3].toString());
+
+                    if (jerarquia > tipAtencionMasAlta)
+                        tipAtencionMasAlta = jerarquia;
+                }
+            }
+
+            for (int x = 0; x < contPacientes; x++) {
+                if ((int) pacientes[x][4] == prioridadMasAlta && obtenerJerarquiaAtencion(pacientes[x][3].toString()) == tipAtencionMasAlta) {
+
+                    contPaciPrioritarios++;
+
+                    System.out.println("\n===================================");
+                    System.out.println("Paciente Prioritario #" + contPaciPrioritarios);
+                    System.out.println("Numero de documento: " + pacientes[x][0]);
+                    System.out.println("Nombre completo: " + pacientes[x][1]);
+                    System.out.println("Edad: " + pacientes[x][2]);
+                    System.out.println("Tipo de Atencion: " + pacientes[x][3]);
+                    System.out.println("Nivel de prioridad: " + pacientes[x][4]);
+                    System.out.println("===================================");
+                }
+            }
+
+        } else {
+            System.out.println("\nNo hay pacientes ingresados.");
         }
-        else System.out.println("\nNo hay pacientes ingresados.");
+    }
+
+    public static int obtenerJerarquiaAtencion(String tipoAtencion) {
+        if (tipoAtencion.equalsIgnoreCase("Urgencias"))
+            return 3;
+        else if (tipoAtencion.equalsIgnoreCase("Prioritaria"))
+            return 2;
+        else
+            return 1;
     }
 }
