@@ -21,7 +21,7 @@ public class App {
         menuCafeteria();
     }
 
-    /* EJERCICIO #1: Sistema de control de turnos para una IPS*/
+    /* EJERCICIO #1: Sistema de control de turnos para una IPS */
     public static void menuIps() {
         int opcion = 0, contPacientes = 0;
 
@@ -185,8 +185,7 @@ public class App {
         return paciente;
     }
 
-    public static void listarPacientes(Object[][] pacientes,
-            String[] estadoTurnos, int contPacientes) {
+    public static void listarPacientes(Object[][] pacientes, String[] estadoTurnos, int contPacientes) {
 
         if (contPacientes > 0) {
             for (int i = 0; i < contPacientes; i++) {
@@ -335,12 +334,15 @@ public class App {
             return 1;
     }
 
-    /* EJERCICIO #2: Sistema de control de inventario para una cafetería universitaria*/
+    /*
+     * EJERCICIO #2: Sistema de control de inventario para una cafetería
+     * universitaria
+     */
     public static void menuCafeteria() {
         InventarioCafeteria.ejecutar(sc);
     }
 
-    /* EJERCICIO #3: Sistema de control académico para seguimiento de notas*/
+    /* EJERCICIO #3: Sistema de control académico para seguimiento de notas */
     public static void menuNotas() {
 
         int opcion;
